@@ -21,6 +21,27 @@ def on_a_pressed():
         Nave,
         0,
         -200)
+    sprites.create_projectile_from_sprite(img("""
+            . . . . . . . c d . . . . . . . 
+                    . . . . . . . c d . . . . . . . 
+                    . . . . . . . c d . . . . . . . 
+                    . . . . . . . c b . . . . . . . 
+                    . . . . . . . f f . . . . . . . 
+                    . . . . . . . c 3 . . . . . . . 
+                    . . . . . . . f f . . . . . . . 
+                    . . . . . . . 8 8 . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . .
+        """),
+        Nave,
+        0,
+        -200).start_effect(effects.trail, 500)
     music.pew_pew.play()
 controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
 
@@ -38,10 +59,10 @@ def on_on_overlap2(sprite, otherSprite):
 sprites.on_overlap(SpriteKind.projectile, SpriteKind.enemy, on_on_overlap2)
 
 def on_on_overlap3(sprite, otherSprite):
-    otherSprite.destroy()
-    info.change_life_by(-1)
+    otherSprite.destroy(effects.disintegrate, 500)
     scene.camera_shake(4, 500)
     music.play_tone(277, music.beat(BeatFraction.WHOLE))
+    info.change_life_by(-1)
 sprites.on_overlap(SpriteKind.player, SpriteKind.enemy, on_on_overlap3)
 
 asteroide: Sprite = None
@@ -49,7 +70,7 @@ projectile: Sprite = None
 bala: Sprite = None
 Luna: Sprite = None
 Nave: Sprite = None
-scene.set_background_color(8)
+scene.set_background_color(15)
 Nave = sprites.create(img("""
         ...........f.............
             ..........444............
@@ -116,6 +137,7 @@ Luna = sprites.create(img("""
     """),
     SpriteKind.food)
 music.power_up.play()
+effects.star_field.start_screen_effect()
 
 def on_update_interval():
     global projectile
